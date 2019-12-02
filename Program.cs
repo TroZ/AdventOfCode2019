@@ -8,13 +8,15 @@ namespace AdventOfCode
         static void Main(string[] args)
         {
             //Console.WriteLine("Hello World!");
-            Day1 prog = new Day1();
+            //Day1 prog = new Day1();
+            Day2 prog = new Day2();
             prog.main();
         }
 
 
         public static string[] readFile(int num)
         {
+            /*
             int counter = 0;
             string line;
             Dictionary<int, string> lines = new Dictionary<int, string>();
@@ -35,7 +37,9 @@ namespace AdventOfCode
             {
                 ret[i] = lines[i];
             }
-            return ret;
+            /*/
+            return System.IO.File.ReadAllLines(@"C:\Users\TroZ\Projects\AdventOfCode\AdventOfCode\AdventOfCode\day" + num + ".txt");
+            //*/
         }
     }
 }
