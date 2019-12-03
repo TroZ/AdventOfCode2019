@@ -9,7 +9,8 @@ namespace AdventOfCode
         {
             //Console.WriteLine("Hello World!");
             //Day1 prog = new Day1();
-            Day2 prog = new Day2();
+            //Day2 prog = new Day2();
+            Day3 prog = new Day3();
             prog.main();
         }
 
