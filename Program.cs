@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace AdventOfCode
 {
@@ -10,7 +11,8 @@ namespace AdventOfCode
             //Console.WriteLine("Hello World!");
             //Day1 prog = new Day1();
             //Day2 prog = new Day2();
-            Day3 prog = new Day3();
+            //Day3 prog = new Day3();
+            Day4 prog = new Day4();
             prog.main();
         }
 
@@ -41,6 +43,11 @@ namespace AdventOfCode
             /*/
             return System.IO.File.ReadAllLines(@"C:\Users\TroZ\Projects\AdventOfCode\AdventOfCode\AdventOfCode\day" + num + ".txt");
             //*/
+        }
+
+        internal static void saveImg(Bitmap pic, int num)
+        {
+            pic.Save(@"C:\Users\TroZ\Projects\AdventOfCode\AdventOfCode\AdventOfCode\day" + num + ".png", System.Drawing.Imaging.ImageFormat.Png);
         }
     }
 }
