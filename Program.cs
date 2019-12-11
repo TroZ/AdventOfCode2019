@@ -16,7 +16,9 @@ namespace AdventOfCode
             //Day5 prog = new Day5();
             //Day6 prog = new Day6();
             //Day7 prog = new Day7();
-            Day8 prog = new Day8();
+            //Day8 prog = new Day8();
+            //Day9 prog = new Day9();
+            Day10 prog = new Day10();
             prog.main();
         }
 
