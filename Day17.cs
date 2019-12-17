@@ -4,35 +4,93 @@ using System.Text;
 
 namespace AdventOfCode
 {
-    class Day9
+    class Day17
     {
+
         public void main()
         {
 
             long[] data = getData();
 
 
-            Intcode9 comp = new Intcode9(data);
-            comp.setInput(1);
+            Intcode17 comp = new Intcode17(data);
+
+            string outp = "";
+            while (!comp.isHalted() && !comp.isNeedInput())
+            {
+                comp.runToOutOrHalt();
+                if (!comp.isHalted() && !comp.isNeedInput())
+                {
+                    outp += (char)comp.getOutput();
+                }
+            }
+
+
+
+            Console.WriteLine(outp);
+
+
+            string[] lines = outp.Split("\n");
+            int xmax = lines[0].Length - 1;
+            int ymax = lines.Length - 2;
+            int sum = 0;
+            for (int y = 1; y < ymax; y++)
+            {
+                char[] chars = lines[y].ToCharArray();
+                for (int x = 1; x < xmax; x++)
+                {
+                    if(chars[x] == '#')
+                    {
+                        if(chars[x-1] == '#' && chars[x + 1] == '#')
+                        {
+                            if(lines[y-1].ToCharArray()[x] == '#' && lines[y + 1].ToCharArray()[x] == '#')
+                            {
+                                sum += x * y;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine("Sum of alignment is  " + sum);
+
+
+
+            data = getData();
+            data[0] = 2;
+            comp = new Intcode17(data);
+
+            string prg = "L,12,R,4,R,4,L,6, L,12,R,4,R,4,R,12, L,12,R,4,R,4,L,6, L,10,L,6,R,4, L,12,R,4,R,4,L,6, L,12,R,4,R,4R,12, L,10,L,6,R,4, L,12,R,4,R,4,R,12, L,10,L,6,R,4, L,12,R,4,R,4,L,6";
+            string prg2 = @"A,B,A,C,A,B,C,B,C,A
+L,12,R,4,R,4,L,6
+L,12,R,4,R,4,R,12
+L,10,L,6,R,4
+n
+";
+
+            for(int i = 0; i < prg2.Length; i++)
+            {
+                char c = prg2.ToCharArray()[i];
+                if(c>32 || c == 10)
+                {
+                    comp.setInput(c);
+                }
+            }
+
             comp.runToHalt();
 
-            Console.WriteLine("Part1 = " + comp.getOutput());
+            Console.WriteLine("Dust =  " + comp.getOutput());
 
 
-            comp = new Intcode9(data);
-            comp.setInput(2);
-            comp.runToHalt();
-
-            Console.WriteLine("Part1 = " + comp.getOutput());
         }
 
 
         long[] getData()
         {
-            string[] lines = Program.readFile(9);
-            //string[] lines = { "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99" };
-            //string[] lines = { "1102,34915192,34915192,7,4,7,99,0" };
-            //string[] lines = { "104,1125899906842624,99" };
+            string[] lines = Program.readFile(17);
+            //string[] lines = { "3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0" };
+            //string[] lines = { "3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0" };
+            //string[] lines = {"3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0"};
             //string[] lines = { "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5" };
             string[] data = lines[0].Split(',');
             long[] val = new long[data.Length];
@@ -42,13 +100,9 @@ namespace AdventOfCode
             }
             return val;
         }
-
     }
 
-
-
-
-    class Intcode9
+    class Intcode17
     {
         //long[] mem;
         Dictionary<long, long> mem = new Dictionary<long, long>();
@@ -56,39 +110,27 @@ namespace AdventOfCode
         long result = 0;
         bool ok = true;
         int relBase = 0;
+        bool needInp;
 
         Queue<long> inp = new Queue<long>();
         long outp = 0;
 
         long lastOp = 0;
 
-        public Intcode9(long[] program)
+        public Intcode17(long[] program)
         {
-            /*
-            int size = program.Length * 10;
-            if(size < 10000)
-            {
-                size = 10000;
-            }
-            mem = new long[size];
-            for(int i = 0; i < mem.Length; i++)
-            {
-                mem[i] = 0;
-            }
-            for(int i = 0; i < program.Length; i++)
-            {
-                mem[i] = program[i];
-            }
-            */
+
             for (int i = 0; i < program.Length; i++)
             {
                 mem[i] = program[i];
             }
         }
 
+
         public void setInput(int input)
         {
             inp.Enqueue(input);
+            needInp = false;
         }
 
         public long getOutput()
@@ -107,7 +149,7 @@ namespace AdventOfCode
         public void runToOutOrHalt()
         {
             Step();
-            while (lastOp != 4 && ok)
+            while (lastOp != 4 && ok && !needInp)
             {
                 Step();
             }
@@ -119,9 +161,14 @@ namespace AdventOfCode
             return !ok;
         }
 
+        public Boolean isNeedInput()
+        {
+            return needInp;
+        }
+
         void Step()
         {
-            long op = getVal(pos,1);
+            long op = getVal(pos, 1);
             int param1, param2, param3;
             param1 = (int)(op / 100) % 10;
             param2 = (int)(op / 1000) % 10;
@@ -142,20 +189,25 @@ namespace AdventOfCode
                     pos += 4;
                     break;
                 case 3:
-                    //string str = Console.ReadLine();
-                    //setVal(pos + 1, param1, Int32.Parse(str.Trim()));
-                    if (inp.Count == 0)
+
+                    if(inp.Count == 0)
                     {
+                        needInp = true;
                         return;
                     }
+
                     setVal(pos + 1, param1, inp.Dequeue());
+
                     pos += 2;
                     break;
                 case 4:
-                    //Console.WriteLine(getVal(mem, pos + 1, param1));
+
                     outp = getVal(pos + 1, param1);
                     pos += 2;
-                    Console.WriteLine(outp);
+                    if (outp < 128)
+                    {
+                        Console.Write((char)outp);
+                    }
                     break;
                 case 5:
                     if (getVal(pos + 1, param1) != 0)
@@ -222,7 +274,8 @@ namespace AdventOfCode
             if (mode == 0)
             {
                 long realPos = getVal(pos, 1);
-                if (mem.ContainsKey(realPos)) {
+                if (mem.ContainsKey(realPos))
+                {
                     return mem[realPos];
                 }
                 return 0;
@@ -238,7 +291,7 @@ namespace AdventOfCode
             else if (mode == 2)
             {
                 long realPos = getVal(pos, 1);
-                if (mem.ContainsKey(relBase+realPos))
+                if (mem.ContainsKey(relBase + realPos))
                 {
                     return mem[relBase + realPos];
                 }
@@ -251,7 +304,7 @@ namespace AdventOfCode
         {
             if (mode == 0)
             {
-                mem[getVal(pos,1)] = val; 
+                mem[getVal(pos, 1)] = val;
             }
             else if (mode == 1)
             {
@@ -262,7 +315,8 @@ namespace AdventOfCode
                 mem[relBase + mem[pos]] = val;
             }
         }
-    }
 
+
+    }
 
 }

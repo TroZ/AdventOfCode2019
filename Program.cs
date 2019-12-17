@@ -22,8 +22,12 @@ namespace AdventOfCode
             //Day11 prog = new Day11();
             //Day12 prog = new Day12();
             //Day13 prog = new Day13();
-            Day14 prog = new Day14();
+            //Day14 prog = new Day14();
+            //Day15 prog = new Day15(); //has a main2 for part2
+            //Day16 prog = new Day16();
+            Day17 prog = new Day17();
             prog.main();
+            //prog.main2();
         }
 
 

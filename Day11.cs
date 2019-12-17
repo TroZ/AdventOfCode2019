@@ -14,7 +14,7 @@ namespace AdventOfCode
             long[] data = getData();
 
 
-            Intercal11 comp = new Intercal11(data);
+            Intcode11 comp = new Intcode11(data);
 
             comp.runToHalt();
 
@@ -24,7 +24,7 @@ namespace AdventOfCode
 
 
             data = getData();
-            comp = new Intercal11(data);
+            comp = new Intcode11(data);
             comp.setPanel(250, 250, 1);
             comp.runToHalt();
 
@@ -76,7 +76,7 @@ namespace AdventOfCode
         }
     }
 
-    class Intercal11
+    class Intcode11
     {
         //long[] mem;
         Dictionary<long, long> mem = new Dictionary<long, long>();
@@ -101,7 +101,7 @@ namespace AdventOfCode
         Dictionary<Tuple<int, int>, int> paintCount = new Dictionary<Tuple<int, int>, int>();
 
 
-        public Intercal11(long[] program)
+        public Intcode11(long[] program)
         {
             /*
             int size = program.Length * 10;

@@ -126,8 +126,6 @@ namespace AdventOfCode
 
             Console.WriteLine("ORE needed is  " + oreamount);
 
-            //3061522
-
 
             need.Clear();
             extra.Clear();
@@ -156,7 +154,7 @@ namespace AdventOfCode
 
 
 
-
+/*
             need.Clear();
             extra.Clear();
             totalfuel = 0; 
@@ -181,7 +179,7 @@ namespace AdventOfCode
                 }
             }
             Console.WriteLine("Total fuel is  " + totalfuel);
-
+            */
 
 /*
             need.Clear();
@@ -211,7 +209,7 @@ namespace AdventOfCode
 */
 
 
-
+/*
             need.Clear();
             extra.Clear();
             totalfuel = 0;
@@ -226,7 +224,7 @@ namespace AdventOfCode
                 }
             }
             Console.WriteLine("Total fuel is  " + totalfuel);
-
+            */
 
         }
 
